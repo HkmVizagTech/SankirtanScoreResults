@@ -16,53 +16,72 @@
       .table-container {
         display: flex;
         flex-direction: column;
-        gap: 20px;
-        max-width: 600px;
-        height: auto;
+        gap: 30px;
+        max-width: 1200px;
         margin: 0 auto;
       }
       .responsive-table {
         width: 100%;
         background: white;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-        padding: 20px 10px 10px 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        overflow: hidden;
       }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: white;
-        margin-top: 10px;
+      .airtable-embed {
+        border-radius: 8px;
+        min-height: 500px;
+        transform-origin: top left;
       }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: center;
+      /* Desktop - make content bigger */
+      @media (min-width: 1025px) {
+        .responsive-table {
+          transform: scale(1.15);
+          transform-origin: center top;
+          margin-bottom: 50px;
+        }
+        .airtable-embed {
+          height: 600px !important;
+        }
       }
-      th {
-        background: #4a90e2;
-        color: white;
-      }
-      tfoot th {
-        background: #eaf1fb;
-        color: #333;
-        font-weight: bold;
-      }
-      @media (max-width: 700px) {
+      /* Tablet styles */
+      @media (max-width: 1024px) and (min-width: 701px) {
         .table-container {
-          gap: 20px;
+          max-width: 95%;
+          gap: 25px;
         }
         .responsive-table {
-          padding: 10px 2px 2px 2px;
+          transform: scale(1.1);
+          transform-origin: center top;
+          margin-bottom: 40px;
         }
-        th,
-        td {
-          padding: 6px;
+        .airtable-embed {
+          height: 550px !important;
+        }
+      }
+      /* Mobile styles */
+      @media (max-width: 700px) {
+        body {
+          padding: 10px;
+        }
+        h1 {
+          font-size: 22px;
+        }
+        h3 {
           font-size: 14px;
         }
-        h2 {
-          font-size: 18px;
+        .table-container {
+          gap: 20px;
+          max-width: 100%;
+        }
+        .responsive-table {
+          border-radius: 6px;
+          transform: scale(1.05);
+          transform-origin: center top;
+          margin-bottom: 20px;
+        }
+        .airtable-embed {
+          height: 500px !important;
         }
       }
     </style>
@@ -74,41 +93,6 @@
       Prabhupada
     </h3>
 
-    <!-- <div class="table-container">
-      <div class="responsive-table">
-        <h2>Contacts & Lakshmi Points</h2>
-        <table id="contactsLakshmiTable">
-          <thead>
-            <tr>
-              <th>Devotee Name</th>
-              <th>Contacts</th>
-              <th>Lakshmi Points</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-          <tfoot>
-            <tr>
-              <th>Total</th>
-              <th id="totalContacts"></th>
-              <th id="totalLakshmi"></th>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div class="responsive-table">
-        <h2>Book & Sale Points (Yesterday)</h2>
-        <table id="bookSaleTable">
-          <thead>
-            <tr>
-              <th>Devotee Name</th>
-              <th>Book Points</th>
-              <th>Sale Points</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div> -->
     <div class="table-container">
       <div class="responsive-table">
         <iframe
@@ -133,81 +117,5 @@
         ></iframe>
       </div>
     </div>
-
-    <script>
-      const SHEET_URL =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSQRLd8zQfGmTQBWIvrOC9kOHJKZLaciv-UvAn5f806Fi_5y16evtrgiTUaGkNAelKNIxEUYa8tA_NT/pub?output=csv";
-
-      function getYesterdayStr() {
-        const d = new Date();
-        d.setDate(d.getDate() - 1);
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, "0");
-        const dd = String(d.getDate()).padStart(2, "0");
-        return [
-          `${dd}/${mm}/${yyyy}`,
-          `${yyyy}-${mm}-${dd}`,
-          `${mm}/${dd}/${yyyy}`,
-        ];
-      }
-
-      fetch(SHEET_URL)
-        .then((res) => res.text())
-        .then((csv) => {
-          const rows = csv.split("\n").slice(1);
-          const yesterdayStrs = getYesterdayStr();
-          const devoteeMap = {};
-
-          rows.forEach((row) => {
-            const cols = row.split(",");
-            if (cols.length < 7) return;
-            const date = cols[1].trim();
-            if (!yesterdayStrs.includes(date)) return;
-            const devotee = cols[2].trim();
-            devoteeMap[devotee] = {
-              contacts: Number(cols[3]) || 0,
-              lakshmi: Number(cols[4]) || 0,
-              book: Number(cols[5]) || 0,
-              sales: Number(cols[6]) || 0,
-            };
-          });
-
-          const sortedDevotees = Object.keys(devoteeMap).sort();
-
-          let totalContacts = 0,
-            totalLakshmi = 0;
-          const contactsLakshmiTbody = document.querySelector(
-            "#contactsLakshmiTable tbody"
-          );
-          contactsLakshmiTbody.innerHTML = "";
-          sortedDevotees.forEach((devotee) => {
-            const d = devoteeMap[devotee];
-            totalContacts += d.contacts;
-            totalLakshmi += d.lakshmi;
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${devotee}</td>
-              <td>${d.contacts}</td>
-              <td>${d.lakshmi}</td>
-            `;
-            contactsLakshmiTbody.appendChild(tr);
-          });
-          document.getElementById("totalContacts").textContent = totalContacts;
-          document.getElementById("totalLakshmi").textContent = totalLakshmi;
-
-          const bookSaleTbody = document.querySelector("#bookSaleTable tbody");
-          bookSaleTbody.innerHTML = "";
-          sortedDevotees.forEach((devotee) => {
-            const d = devoteeMap[devotee];
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${devotee}</td>
-              <td>${d.book}</td>
-              <td>${d.sales}</td>
-            `;
-            bookSaleTbody.appendChild(tr);
-          });
-        });
-    </script>
   </body>
 </html>
