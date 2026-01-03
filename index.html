@@ -12,7 +12,7 @@
       }
       h1,
       h3 {
-        text-align: center;
+        text-align: left;
       }
       .table-container {
         display: flex;
@@ -88,8 +88,8 @@
     </style>
   </head>
   <body>
-    <h1 style="padding-right: 100px">Sankirtan Score Results</h1>
-    <h3 style="padding-right: 100px; font-style: semibold">LLP Report</h3>
+    <h1 style="padding-left: 100px">Sankirtan Score Results</h1>
+    <h3 style="padding-left: 100px; font-style: semibold">LLP Report</h3>
     <div class="table-container">
       <div class="responsive-table">
         <iframe
@@ -102,16 +102,11 @@
           style="background: transparent; border: 1px solid #ccc"
         ></iframe>
       </div>
-      <h3
-        style="
-          /* padding-left: 10px; */
-          font-style: semibold;
-          margin-top: 20px;
-          margin-bottom: -20px;
-        "
-      >
+      <hr />
+      <h4 style="padding-left: 10px; font-style: semibold">
         Book Distribution Report
-      </h3>
+      </h4>
+      <hr />
       <div class="responsive-table">
         <iframe
           class="airtable-embed"
