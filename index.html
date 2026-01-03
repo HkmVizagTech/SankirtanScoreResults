@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.05" />
     <title>Sankirtan Daily Score</title>
     <style>
       body {
@@ -11,7 +12,7 @@
       }
       h1,
       h3 {
-        text-align: center;
+        text-align: left;
       }
       .table-container {
         display: flex;
@@ -76,23 +77,19 @@
         }
         .responsive-table {
           border-radius: 6px;
-          transform: scale(1.05);
+          transform: scale(1.1);
           transform-origin: center top;
           margin-bottom: 20px;
         }
         .airtable-embed {
-          height: 500px !important;
+          height: 100px !important;
         }
       }
     </style>
   </head>
   <body>
-    <h1>Sankirtan Score Results</h1>
-    <h3>
-      For the pleasure of Their Lordships Sri Sri Nitai Gauranga and Srila
-      Prabhupada
-    </h3>
-
+    <h1 style="padding-left: 100px">Sankirtan Score Results</h1>
+    <h3 style="padding-left: 100px; font-style: semibold">LLP Report</h3>
     <div class="table-container">
       <div class="responsive-table">
         <iframe
@@ -100,18 +97,28 @@
           src="https://airtable.com/embed/appwbtuV58xUBFUPT/shrWMSMBCb1NGp7YQ?viewControls=on"
           frameborder="0"
           onmousewheel=""
-          width="100%"
+          width="50%"
           height="333"
           style="background: transparent; border: 1px solid #ccc"
         ></iframe>
       </div>
+      <h3
+        style="
+          /* padding-left: 10px; */
+          font-style: semibold;
+          margin-top: 20px;
+          margin-bottom: -20px;
+        "
+      >
+        Book Distribution Report
+      </h3>
       <div class="responsive-table">
         <iframe
           class="airtable-embed"
           src="https://airtable.com/embed/appwbtuV58xUBFUPT/shrF2Ck7roNzS1vLH?viewControls=on"
           frameborder="0"
           onmousewheel=""
-          width="100%"
+          width="50%"
           height="333"
           style="background: transparent; border: 1px solid #ccc"
         ></iframe>
@@ -119,5 +126,3 @@
     </div>
   </body>
 </html>
-
-
